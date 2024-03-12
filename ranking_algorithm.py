@@ -1,31 +1,13 @@
-# Sample data
-data = [
-    {
-        "No.": 1,
-        "Title": "Thrift Shop",
-        "Artist(s)": "Macklemore & Ryan Lewis featuring Wanz",
-        "Year": 2013,
-    },
-    {
-        "No.": 2,
-        "Title": "Blurred Lines",
-        "Artist(s)": "Robin Thicke featuring T.I. and Pharrell Williams",
-        "Year": 2013,
-    },
-    # Add all other entries here...
-    {
-        "No.": 100,
-        "Title": "Still Into You",
-        "Artist(s)": "Paramore",
-        "Year": 2013,
-    },
-]
-
 # Step 1: Assign Scores Based on Ranking
+# input variables: song rankings, and name of the artists
+from extract_data import generate
+
 scores_by_artist = {}
-for song in data:
-    score = 101 - song["No."]  # Calculate the score based on ranking
-    artist = song["Artist(s)"]
+artists = generate()
+
+for i in range(100):
+    score = 101 - i  # Calculate the score based on ranking
+    artist = artists[i]
     if artist in scores_by_artist:
         scores_by_artist[artist] += score
     else:

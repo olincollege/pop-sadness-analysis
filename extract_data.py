@@ -34,3 +34,6 @@ def generate():
         artists.append(format_for_genius(remove_features(x["Artist(s)"][i])))
 
     return title, artists
+
+
+print(generate())
