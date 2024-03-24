@@ -34,4 +34,10 @@ df = pd.DataFrame(
     }
 )
 
+lyrics_only = pd.DataFrame(pd.Series(lyrics))
+
 df.to_csv("billboard_data_with_lyrics", encoding="utf-8", index=False)
+
+lyrics_only.to_csv(
+    "billboard_data_with_lyrics_only", encoding="utf-8", index=False
+)
