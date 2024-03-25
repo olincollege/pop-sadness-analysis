@@ -1,13 +1,13 @@
 import pandas as pd
 from lyricsgenius import Genius
 
-import helpers
+import helper_function
 import api_key
 
 genius = Genius(api_key.client_access_token)
 billboard_df = pd.read_csv("billboard_100.csv")
 
-artists = helpers.generate(billboard_df)
+artists = helper_function.generate(billboard_df)
 
 artists_series = pd.Series(artists)
 lyrics = []
@@ -22,7 +22,7 @@ for i in range(num_songs):
             break
         except:
             pass
-    lyrics.append(helpers.format_genius_lyrics(song.lyrics))
+    lyrics.append(helper_function.format_genius_lyrics(song.lyrics))
 
 df = pd.DataFrame(
     {

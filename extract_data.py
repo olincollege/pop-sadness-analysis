@@ -26,14 +26,12 @@ def remove_features(string):
 
 
 def generate():
-    title = []
     artists = []
 
     for i in range(len(x)):
-        title.append(format_for_genius(x["Title"][i]))
         artists.append(format_for_genius(remove_features(x["Artist(s)"][i])))
 
-    return title, artists
+    return artists
 
 
 print(generate())
