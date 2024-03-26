@@ -1,43 +1,41 @@
 import pandas as pd
 from lyricsgenius import Genius
-
 import helper_function
-import api_key
+import api_key  # You'll have to make one of these yourself on the Genius website
 
 genius = Genius(api_key.client_access_token)
+
+# Load and format billboard data
 billboard_df = pd.read_csv("billboard_100.csv")
-
 artists = helper_function.generate(billboard_df)
-
 artists_series = pd.Series(artists)
 lyrics = []
-num_songs = 1100
 
-for i in range(num_songs):
+# Number of songs to be scraped. If scraping all songs, should be 100
+NUM_SONGS = 1100
+
+# Scrape the songs
+for i in range(NUM_SONGS):
     while True:
         try:
             song = genius.search_song(
                 billboard_df["Title"][i], artists_series[i]
             )
             break
-        except:
+        except:  # If the request times out (which often happens), request again
             pass
     lyrics.append(helper_function.format_genius_lyrics(song.lyrics))
 
+# Save the scraped data into a DataFrame
 df = pd.DataFrame(
     {
-        "No.": billboard_df["No."][:num_songs],
-        "Title": billboard_df["Title"][:num_songs],
-        "Artists": artists_series[:num_songs],
-        "Year": billboard_df["Year"][:num_songs],
+        "No.": billboard_df["No."][:NUM_SONGS],
+        "Title": billboard_df["Title"][:NUM_SONGS],
+        "Artists": artists_series[:NUM_SONGS],
+        "Year": billboard_df["Year"][:NUM_SONGS],
         "Lyrics": pd.Series(lyrics),
     }
 )
 
-lyrics_only = pd.DataFrame(pd.Series(lyrics))
-
+# Save the data to a file
 df.to_csv("billboard_data_with_lyrics", encoding="utf-8", index=False)
-
-lyrics_only.to_csv(
-    "billboard_data_with_lyrics_only", encoding="utf-8", index=False
-)

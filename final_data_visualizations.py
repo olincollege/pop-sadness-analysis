@@ -1,5 +1,6 @@
 # FIRST VISUALIZATION
 
+
 import numpy as np
 import pandas as pd
 import nltk
@@ -14,33 +15,26 @@ from wordcloud import WordCloud
 nltk.download("vader_lexicon")  # Run this line the first time you run this code
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+# Initialize the sentiment analyzer
 analyzer = SentimentIntensityAnalyzer()
 
-# import data
+# Import data
 loaded_data = pd.read_csv("billboard_data_with_lyrics")
 lyrics_data = loaded_data["Lyrics"]
 
 positivity_scores = []
-entry_number = []
 
+# Add a Positivity series to the Billboard dataframe
 for i in range(len(lyrics_data)):
-    lyrics = lyrics_data[i]
     positivity_scores.append(
         analyzer.polarity_scores(lyrics_data[i])["compound"]
     )
-    entry_number.append(i)
 
 all_data = pd.concat(
     [loaded_data, pd.DataFrame({"Positivity": positivity_scores})], axis=1
 )
 
-positivity_by_position = [0] * 100
-
-for i in range(len(all_data)):
-    positivity_by_position[all_data["No."][i] - 1] += (
-        1 / 11 * all_data["Positivity"][i]
-    )
-
+# Plot average positivity scores for each year from the past 10 years
 scores = [
     sum(positivity_scores[:101]) / 100,
     sum(positivity_scores[100:201]) / 100,
@@ -70,11 +64,15 @@ years = [
 
 plt.figure()
 plt.plot(years, scores, "r--")  # plot general trend line
+
+# Plot every song and its score
 indiv_scores = plt.scatter(
     np.linspace(2013, 2023.99, num=1100), positivity_scores
-)  # plot every song
+)
 
 
+# Using the mplcursors library, display information about each data point
+# when you hover over it.
 def show_hover_panel(get_text_func=None):
     """
     Displays specified content whenever the cursor is hovering over a data
@@ -211,6 +209,7 @@ ncols = 3
 nrows = len(top_artist_polarityscore) // ncols + (
     len(top_artist_polarityscore) % ncols > 0
 )
+
 # Create a large figure to hold all subplots
 plt.figure(figsize=(ncols * 5, nrows * 5))  # Width and height of entire figure
 
@@ -238,6 +237,7 @@ plt.tight_layout()
 # Display the visualization
 plt.show()
 
+# THIRD VISUALIZATION
 
 # NEGATIVE WORDS WORDCLOUD
 
@@ -274,22 +274,17 @@ with open(csv_file_path, encoding="utf8", newline="") as csvfile:
     ]
 
     for count, row in enumerate(csvreader, start=0):
-        # Process each row here
-        # For example, you can print it
-
-        # apparently "row" is a list? Coz its a data frame so its a list. I didnt kno that lol
-
         words = helper_function.split_text_into_words(row[4])
         for word in words:
-
-            word = word.lower()
+            word = (
+                word.lower()
+            )  # Ensure upper/lower case does not affect visual
             if word in irrelevant_words:
                 continue
             if helper_function.polarity(word)["compound"] < -0.3:
-
                 # Choose the correct dictionary based on the count
                 current_dict = list_of_dictionary[count // 400]
-                # Use get to avoid KeyError, defaulting to 0 if the key doesn't exist
+                # Use get to avoid KeyError, defaults to 0 if the key doesn't exist
                 current_dict[word] = current_dict.get(word, 0) + 1
 
 
@@ -317,27 +312,22 @@ with open(csv_file_path, newline="") as csvfile:
     ]
 
     for count, row in enumerate(csvreader, start=0):
-        # Process each row here
-        # For example, you can print it
-
-        # apparently "row" is a list? Coz its a data frame so its a list. I didnt kno that lol
-
         words = helper_function.split_text_into_words(row[4])
         for word in words:
-
-            word = word.lower()
+            word = (
+                word.lower()
+            )  # Ensure upper/lower case does not affect visual
             if word in irrelevant_words:
                 continue
             if helper_function.polarity(word)["compound"] > 0.3:
                 # Choose the correct dictionary based on the count
                 current_dict = list_of_dictionary[count // 400]
-                # Use get to avoid KeyError, defaulting to 0 if the key doesn't exist
+                # Use get to avoid KeyError, defaults to 0 if the key doesn't exist
                 current_dict[word] = current_dict.get(word, 0) + 1
 
 # Generate the word cloud
 year = 2013
 for i in range(3):
-
     helper_function.generate_word_cloud_from_frequencies(
         list_of_dictionary[i],
         f"Positive Word Cloud From Year {year} to {year + 3 - (i == 2)} ",

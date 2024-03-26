@@ -44,7 +44,9 @@ def format_genius_lyrics(string):
     for i in range(len(string)):
         # The string Lyricsgenius returns starts with some text about the
         # number of contributors and '[Title] lyrics', so this code makes
-        # sure it doesn't start reading until after it sees that word.
+        # sure it doesn't start reading until after it sees that word and
+        # doesn't stop until it sees "Embed", which occurs right after the
+        # lyrics end.
         if string[i - 6 : i] == "Lyrics":
             lyrics_started = True
         # Adds all text not in brackets
@@ -72,12 +74,12 @@ def format_genius_lyrics(string):
 
 def generate(dataframe):
     """
-    Generates list of all Artists from our Billboard Hot 100 data.
+    Generates list of all Artists from a dataframe.
     Args:
-        dataframe: a dataframe containing the Hot 100 data.
+        dataframe: a dataframe containing a series titled "Artists", from which
+        the list of artists will be made.
     Returns:
-        a list of all artists in year order (and in order of the position on
-        the chart within each year). Artists are included multiple times
+        a list of all artists in the dataframe. Artists are included multiple times
         if they have multiple songs on the chart.
     """
     artists = []
