@@ -1,7 +1,13 @@
+"""
+This module uses the Genius API to scrape the song lyrics from every song on the
+year-end Billboard Hot 100 chart from 2013 to 2023 and stores those lyrics in a
+file.
+"""
+
 import pandas as pd
 from lyricsgenius import Genius
 import helper_function
-import api_key  # You'll have to make one of these yourself on the Genius website
+import api_key  # You'll have to make one of these on the Genius website
 
 genius = Genius(api_key.client_access_token)
 

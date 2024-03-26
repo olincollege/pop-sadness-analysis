@@ -1,4 +1,10 @@
+"""
+This module contains unit tests for all applicable function in the
+helper_function file.
+"""
+
 import pytest
+import pandas as pd
 from helper_function import (
     remove_features,
     format_genius_lyrics,
@@ -42,7 +48,6 @@ FORMAT_GENIUS_LYRICS_CASES = [
 ]
 
 # Create some test data for the generate function to process
-import pandas as pd
 
 test_data = pd.DataFrame(
     {
@@ -92,7 +97,8 @@ SPLIT_TEXT_INTO_WORDS_CASES = [
             "Words",
         ],
     ),
-    # Test that punctutation, newlines, and multiple spaces are not counted as words
+    # Test that punctutation, newlines, and multiple spaces are not counted as
+    # words
     ("     \n  ?!><.:;   ", []),
     # Test that punctuations are not counted as part of words
     (
@@ -116,8 +122,8 @@ def test_remove_features(title_input, title_output):
 
     Args:
         title_input: a string representing the song's artists
-        title_output: a string representing the song's artists (now excluding featured
-        artists).
+        title_output: a string representing the song's artists (now excluding
+        featured artists).
     """
     assert remove_features(title_input) == title_output
 
@@ -134,8 +140,8 @@ def test_format_genius_lyrics(lyrics_input, lyrics_output):
     well as random webpage oddities that occur when scraping data through the
     Genius API.
     Args:
-        lyrics_input: a string containing the scraped webpage data, which includes
-        (but is not entirely) the lyrics.
+        lyrics_input: a string containing the scraped webpage data, which
+        includes (but is not entirely) the lyrics.
         lyrics_output: a string representing the song's lyrics.
     """
     assert format_genius_lyrics(lyrics_input) == lyrics_output
@@ -148,10 +154,10 @@ def test_generate(dataframe_input, artists_output):
     generate function returns a list of all Artists from the dataframe, ensuring
     that artists that have multiple entries are included multiple times.
     Args:
-        dataframe_input: a dataframe containing a series titled "Artists", from which
-        the list of artists will be made.
-        dataframe_output: a list of all artists in the dataframe. Artists are included multiple times
-        if they have multiple songs on the chart.
+        dataframe_input: a dataframe containing a series titled "Artists", from
+        which the list of artists will be made.
+        dataframe_output: a list of all artists in the dataframe. Artists are
+        included multiple times if they have multiple songs on the chart.
     """
     assert generate(dataframe_input) == artists_output
 
