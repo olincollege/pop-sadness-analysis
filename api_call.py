@@ -17,7 +17,7 @@ artists = helper_function.generate(billboard_df)
 artists_series = pd.Series(artists)
 lyrics = []
 
-# Number of songs to be scraped. If scraping all songs, should be 100
+# Number of songs to be scraped. If scraping all songs, should be 1100
 NUM_SONGS = 1100
 
 # Scrape the songs
