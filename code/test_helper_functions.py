@@ -114,6 +114,7 @@ SPLIT_TEXT_INTO_WORDS_CASES = [
 ]
 
 
+# run all tests
 @pytest.mark.parametrize("title_input,title_output", REMOVE_FEATURES_CASES)
 def test_remove_features(title_input, title_output):
     """
@@ -172,5 +173,4 @@ def test_split_text_into_words(text_input, words_output):
         text_input: a string representing the text to split
         text_output: a list of all the words in the string (in order).
     """
-    # Test case with 1 word
     assert split_text_into_words(text_input) == words_output

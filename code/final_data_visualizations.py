@@ -35,9 +35,6 @@ all_data = pd.concat(
     [loaded_data, pd.DataFrame({"Positivity": positivity_scores})], axis=1
 )
 
-# Create dictionary of words and their frequencies
-CSV_FILE_PATH = "data/billboard_data_with_lyrics.csv"
-
 # List of words that are not very interesting, don't have interesting changes,
 # and reduce the effectiveness of the word cloud visual
 irrelevant_words = [
@@ -53,6 +50,71 @@ irrelevant_words = [
     "ass",
     "fire",
 ]
+
+
+# Ranking Algorithm to find Top 5 Artists:
+
+# Step 1: Assign Scores Based on Ranking
+# input variables: song rankings, and name of the artists
+
+top_artist_polarityscore = []
+
+with open(
+    "data/billboard_data_with_lyrics.csv", mode="r", encoding="utf-8"
+) as file:
+    # Create a CSV reader
+    csv_reader = csv.reader(file)
+
+    # Convert it to a list to get the ability to use len() and indexing
+    rows = list(csv_reader)
+
+    # Iterate using indices
+    for j in range(11):  # one iteration for each year
+        scores_by_artist = {}
+        for i in range(100):
+            score = 101 - i  # Calculate the score based on ranking
+            artist = rows[j * 100 + i][2]
+            if artist in scores_by_artist:
+                scores_by_artist[artist] += score
+            else:
+                scores_by_artist[artist] = score
+        # Step 2 & 3: Sort Artists by Total Score
+        sorted_artists = sorted(
+            scores_by_artist.items(), key=lambda x: x[1], reverse=True
+        )
+
+        # Step 4: Select the Top 5 Artists
+        top_5_artists = sorted_artists[:5]
+        top_5_artist_names = [artist[0] for artist in top_5_artists]
+
+        # Step 5" Find the polarity of all the top artists' songs from that year
+        polarity_score = {}
+        polarity_count = {}
+        for i in range(100):
+            artist = rows[j * 100 + i][2]
+
+            if (artist in top_5_artist_names) is False:
+                continue
+
+            if artist in polarity_score:
+                polarity_score[artist] += helper_function.polarity(
+                    rows[j * 100 + i][4]
+                )["compound"]
+                polarity_count[artist] += 1
+            else:
+                polarity_score[artist] = helper_function.polarity(
+                    rows[j * 100 + i][4]
+                )["compound"]
+                polarity_count[artist] = 1
+
+        for x, y in polarity_score.items():
+            polarity_score[x] /= polarity_count[x]
+        top_artist_polarityscore.append(polarity_score)
+
+extended_data = top_artist_polarityscore
+
+# Create dictionaries of words and their frequencies for word cloud visual
+CSV_FILE_PATH = "data/billboard_data_with_lyrics.csv"
 
 with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
     csvreader = csv.reader(csvfile)
@@ -79,67 +141,6 @@ with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
                 # Use get to avoid KeyError, defaults to 0 if the key doesn't
                 # exist
                 current_dict[word] = current_dict.get(word, 0) + 1
-
-
-# Ranking Algorithm to find Top 5 Artists:
-
-# Step 1: Assign Scores Based on Ranking
-# input variables: song rankings, and name of the artists
-
-top_artist_polarityscore = []
-
-with open(
-    "data/billboard_data_with_lyrics.csv", mode="r", encoding="utf-8"
-) as file:
-    # Create a CSV reader
-    csv_reader = csv.reader(file)
-
-    # Convert it to a list to get the ability to use len() and indexing
-    rows = list(csv_reader)
-
-    # Iterate using indices
-    for j in range(11):
-        scores_by_artist = {}
-        for i in range(100):
-            score = 101 - i  # Calculate the score based on ranking
-            artist = rows[j * 100 + i][2]
-            if artist in scores_by_artist:
-                scores_by_artist[artist] += score
-            else:
-                scores_by_artist[artist] = score
-        # Step 2 & 3: Sort Artists by Total Score
-        sorted_artists = sorted(
-            scores_by_artist.items(), key=lambda x: x[1], reverse=True
-        )
-
-        # Step 4: Select the Top 5 Artists
-        top_5_artists = sorted_artists[:5]
-        top_5_artist_names = [artist[0] for artist in top_5_artists]
-
-        polarity_score = {}
-        polarity_count = {}
-        for i in range(100):
-            artist = rows[j * 100 + i][2]
-
-            if (artist in top_5_artist_names) is False:
-                continue
-
-            if artist in polarity_score:
-                polarity_score[artist] += helper_function.polarity(
-                    rows[j * 100 + i][4]
-                )["compound"]
-                polarity_count[artist] += 1
-            else:
-                polarity_score[artist] = helper_function.polarity(
-                    rows[j * 100 + i][4]
-                )["compound"]
-                polarity_count[artist] = 1
-
-        for x, y in polarity_score.items():
-            polarity_score[x] /= polarity_count[x]
-        top_artist_polarityscore.append(polarity_score)
-
-extended_data = top_artist_polarityscore
 
 
 # FIRST VISUALIZATION - Polarity of Every Top Song with Trendline

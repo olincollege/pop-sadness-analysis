@@ -62,7 +62,8 @@ def format_genius_lyrics(string):
                 formatted_string += string[i]
             if string[i] == "]":
                 bracket_open = False
-            if string[i + 1 : i + 6] == "Embed":
+            # Get rid of anything after the lyrics
+            if string[i + 1 : i + 6] == "Embed":  #
                 lyrics_started = False
 
     # LyricsGenius sometimes leaves a random string of numbers right
