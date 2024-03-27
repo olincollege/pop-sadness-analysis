@@ -1,9 +1,9 @@
 # Pop-sadness-analysis README
 
 ## About the project 
-In this project, we analyse the trend in pop songs and see whether or they have gotten sadder over 10 years. Our research question is: "Has Pop Music Gotten Sadder over the Past 10 Years?" In order to answer this question, we have used web scrapping, and have used specific APIs such as the Genius API in order to gather song lyrics.
+In this project, we analyse the trend in pop songs and see whether or they have gotten sadder over 10 years. Our research question is: "Has pop music gotten sadder over the past 10 years?" In order to answer this question, we have used web scraping, and have used the Genius API in order to gather song lyrics.
 
-In addition, we have visuals in order to justify our point in this data analysis project. We have made 3 visuals, and you could read more about the visuals in the computational essay. 
+In addition, we have visuals in order to justify our point in this data analysis project. We have made 3 visuals, and you can read more about the visuals in the computational essay. 
 
 
 ### Genius API Setup
@@ -28,10 +28,12 @@ matplotlib~=3.7.2
 mplcursors~=0.5.3
 nltk~=3.8.1
 numpy~=1.24.3
+opencv_python~=4.9.0.80
+opencv_python_headless~=4.9.0.80
 pandas~=2.0.3
 pytest~=7.4.0
 wordcloud~=1.9.3
-regex~=2023.12.25 
+regex~=2023.12.25
 ```
 These dependencies can be installed using the command:
 
