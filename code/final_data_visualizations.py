@@ -91,14 +91,14 @@ with open(
         polarity_score = {}
         polarity_count = {}
         for i in range(100):
-            artist = rows[j * 100 + i][2]
+            artist = rows[j * 100 + i][2]  # Artist names are in position 2
 
             if (artist in top_5_artist_names) is False:
                 continue
 
             if artist in polarity_score:
                 polarity_score[artist] += helper_function.polarity(
-                    rows[j * 100 + i][4]
+                    rows[j * 100 + i][4]  # Lyrics are in position 4
                 )["compound"]
                 polarity_count[artist] += 1
             else:
@@ -107,6 +107,7 @@ with open(
                 )["compound"]
                 polarity_count[artist] = 1
 
+        # Take the average polarity score of each artist
         for x, y in polarity_score.items():
             polarity_score[x] /= polarity_count[x]
         top_artist_polarityscore.append(polarity_score)
