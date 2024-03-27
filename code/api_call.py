@@ -12,7 +12,7 @@ import api_key  # You'll have to make one of these on the Genius website
 genius = Genius(api_key.client_access_token)
 
 # Load and format billboard data
-billboard_df = pd.read_csv("billboard_100.csv")
+billboard_df = pd.read_csv("data/billboard_100.csv")
 artists = helper_function.generate(billboard_df)
 artists_series = pd.Series(artists)
 lyrics = []
@@ -44,4 +44,4 @@ df = pd.DataFrame(
 )
 
 # Save the data to a file
-df.to_csv("billboard_data_with_lyrics", encoding="utf-8", index=False)
+df.to_csv("data/billboard_data_with_lyrics", encoding="utf-8", index=False)

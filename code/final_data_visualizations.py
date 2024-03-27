@@ -6,7 +6,7 @@ import csv
 import numpy as np
 import pandas as pd
 import nltk
-from cv2 import cv2
+import cv2
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 from matplotlib.patheffects import withSimplePatchShadow
@@ -19,7 +19,7 @@ nltk.download("vader_lexicon")  # Run this line the first time you run this code
 analyzer = SentimentIntensityAnalyzer()
 
 # Import data
-loaded_data = pd.read_csv("billboard_data_with_lyrics")
+loaded_data = pd.read_csv("data/billboard_data_with_lyrics")
 lyrics_data = loaded_data["Lyrics"]
 
 # PROCESS DATA
@@ -36,7 +36,7 @@ all_data = pd.concat(
 )
 
 # Create dictionary of words and their frequencies
-CSV_FILE_PATH = "billboard_data_with_lyrics.csv"
+CSV_FILE_PATH = "data/billboard_data_with_lyrics.csv"
 
 # List of words that are not very interesting, don't have interesting changes,
 # and reduce the effectiveness of the word cloud visual
@@ -88,7 +88,9 @@ with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
 
 top_artist_polarityscore = []
 
-with open("billboard_data_with_lyrics.csv", mode="r", encoding="utf-8") as file:
+with open(
+    "data/billboard_data_with_lyrics.csv", mode="r", encoding="utf-8"
+) as file:
     # Create a CSV reader
     csv_reader = csv.reader(file)
 
@@ -341,9 +343,9 @@ ROWS = 2
 COLUMNS = 2
 
 # reading images
-Image1 = cv2.imread("negative_word_cloud_1.png")
-Image2 = cv2.imread("negative_word_cloud_2.png")
-Image3 = cv2.imread("negative_word_cloud_3.png")
+Image1 = cv2.imread("visualizations/negative_word_cloud_1.png")
+Image2 = cv2.imread("visualizations/negative_word_cloud_2.png")
+Image3 = cv2.imread("visualizations/negative_word_cloud_3.png")
 
 # Adds a subplot at the 1st position
 fig.add_subplot(ROWS, COLUMNS, 1)
@@ -365,5 +367,6 @@ fig.add_subplot(ROWS, COLUMNS, 3)
 # showing image
 plt.imshow(Image3)
 plt.axis("off")
+
 
 plt.show()
