@@ -234,7 +234,8 @@ def on_add(index):
         dataframe: the dataframe for the data being displayed.
     Returns:
         A string containing the text to be displayed when the specific data
-        point is hovered over.
+        point is hovered over. If the cursor is not hovering over a data point,
+        the function will return None.
     """
     try:
         parts = [
@@ -298,6 +299,7 @@ NROWS = len(top_artist_polarityscore) // NCOLS + (
 # Create a large figure to hold all subplots
 plt.figure(figsize=(NCOLS * 5, NROWS * 5))  # Width and height of entire figure
 
+# Create each subplot
 for i, yearly_data in enumerate(extended_data, start=1):
     ax = plt.subplot(NROWS, NCOLS, i)
     artists = list(yearly_data.keys())
