@@ -22,7 +22,6 @@ loaded_data = pd.read_csv("billboard_data_with_lyrics")
 lyrics_data = loaded_data["Lyrics"]
 
 # PROCESS DATA
-
 positivity_scores = []
 
 # Add a Positivity series to the Billboard dataframe
@@ -49,13 +48,8 @@ irrelevant_words = [
     "shit",
     "fucked",
     "bad",
-    # "like",
-    # "love",
-    # "good",
-    # "ha",
-    # "woo",
-    # "damn",
-    # "ass",
+    "damn",
+    "ass",
 ]
 
 with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
@@ -252,8 +246,38 @@ def on_add(index):
 show_hover_panel(on_add)  # add hover labels
 plt.show()
 
+# SECOND VISUALIZATION - Average Polarity Score of Top 5 Artists by Year
 
-# SECOND VISUALIZATION - Polarity Scores of Top 5 Artists from Every Year
+# Calculate the range of years
+years = np.arange(2013, 2013 + len(top_artist_polarityscore))
+
+# Calculate the average polarity score for each year
+average_scores = [
+    np.mean(list(year.values())) for year in top_artist_polarityscore
+]
+
+# Set up the plot
+plt.figure(figsize=(12, 8))
+
+# Create a bar chart
+plt.bar(years, average_scores, color="skyblue")
+
+# Make sure the Y-axis starts below zero if there are negative values
+plt.ylim([min(average_scores) - 0.1, 1])
+
+# Labeling
+plt.title("Average Polarity Score of Top 5 Artists by Year")
+plt.xlabel("Year")
+plt.ylabel("Average Polarity Score")
+
+# Add value labels on each bar
+for i, score in enumerate(average_scores):
+    plt.text(years[i], score, f"{score:.2f}", ha="center", va="bottom")
+
+# Show the plot
+plt.show()
+
+# THIRD VISUALIZATION - Polarity Scores of Top 5 Artists from Every Year
 
 # Determine global min and max polarity scores for consistent y-axis limits
 all_scores = [
@@ -293,7 +317,8 @@ plt.tight_layout()
 # Display the visualization
 plt.show()
 
-# THIRD VISUALIZATION - Word cloud of most commonly used negative words
+
+# FOURTH VISUALIZATION - Word cloud of most commonly used negative words
 
 # Generate the word cloud
 YEAR = 2013
@@ -303,42 +328,3 @@ for i in range(3):
         f"Negative Word Cloud From Year {YEAR} to {YEAR + 3 - (i == 2)} ",
     )
     YEAR += 4
-
-# POSITIVE WORDS WORDCLOUD
-"""
-with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
-    csvreader = csv.reader(csvfile)
-
-    words_dictionary = {}
-    words_dictionary1 = {}
-    words_dictionary2 = {}
-    list_of_dictionary = [
-        words_dictionary,
-        words_dictionary1,
-        words_dictionary2,
-    ]
-
-    for count, row in enumerate(csvreader, start=0):
-        words = helper_function.split_text_into_words(row[4])
-        for word in words:
-            word = (
-                word.lower()
-            )  # Ensure upper/lower case does not affect visual
-            if word in irrelevant_words:
-                continue
-            if helper_function.polarity(word)["compound"] > 0.3:
-                # Choose the correct dictionary based on the count
-                current_dict = list_of_dictionary[count // 400]
-                # Use get to avoid KeyError, defaults to 0 if the key doesn't
-                # exist
-                current_dict[word] = current_dict.get(word, 0) + 1
-
-# Generate the word cloud
-YEAR = 2013
-for i in range(3):
-    helper_function.generate_word_cloud_from_frequencies(
-        list_of_dictionary[i],
-        f"Positive Word Cloud From Year {YEAR} to {YEAR + 3 - (i == 2)} ",
-    )
-    YEAR += 4
-"""

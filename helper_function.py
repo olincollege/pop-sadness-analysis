@@ -135,7 +135,6 @@ def generate_word_cloud_from_frequencies(frequencies, title):
     wordcloud = WordCloud(
         width=800, height=400, background_color="white"
     ).generate_from_frequencies(frequencies)
-
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
