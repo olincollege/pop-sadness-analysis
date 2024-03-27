@@ -6,6 +6,7 @@ import csv
 import numpy as np
 import pandas as pd
 import nltk
+import cv2
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 from matplotlib.patheffects import withSimplePatchShadow
@@ -50,6 +51,7 @@ irrelevant_words = [
     "bad",
     "damn",
     "ass",
+    "fire",
 ]
 
 with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
@@ -320,7 +322,7 @@ plt.show()
 
 # FOURTH VISUALIZATION - Word cloud of most commonly used negative words
 
-# Generate the word cloud
+# Generate the word clouds
 YEAR = 2013
 for i in range(3):
     helper_function.generate_word_cloud_from_frequencies(
@@ -328,3 +330,40 @@ for i in range(3):
         f"Negative Word Cloud From Year {YEAR} to {YEAR + 3 - (i == 2)} ",
     )
     YEAR += 4
+
+# Put the wordclouds all together
+
+# create figure
+fig = plt.figure(figsize=(10, 7))
+
+# setting values to rows and column variables
+rows = 2
+columns = 2
+
+# reading images
+Image1 = cv2.imread("negative_word_cloud_1.png")
+Image2 = cv2.imread("negative_word_cloud_2.png")
+Image3 = cv2.imread("negative_word_cloud_3.png")
+
+# Adds a subplot at the 1st position
+fig.add_subplot(rows, columns, 1)
+
+# showing image
+plt.imshow(Image1)
+plt.axis("off")
+
+# Adds a subplot at the 2nd position
+fig.add_subplot(rows, columns, 2)
+
+# showing image
+plt.imshow(Image2)
+plt.axis("off")
+
+# Adds a subplot at the 3rd position
+fig.add_subplot(rows, columns, 3)
+
+# showing image
+plt.imshow(Image3)
+plt.axis("off")
+
+plt.show()
