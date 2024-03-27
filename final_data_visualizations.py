@@ -1,18 +1,18 @@
-# FIRST VISUALIZATION
+"""
+This module produces the 3 visualizations of our data.
+"""
 
+import csv
 import numpy as np
 import pandas as pd
 import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 from matplotlib.patheffects import withSimplePatchShadow
 import mplcursors  # separate package must be installed
 import helper_function
-import csv
-import re
-from wordcloud import WordCloud
 
 nltk.download("vader_lexicon")  # Run this line the first time you run this code
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 # Initialize the sentiment analyzer
 analyzer = SentimentIntensityAnalyzer()
@@ -21,6 +21,7 @@ analyzer = SentimentIntensityAnalyzer()
 loaded_data = pd.read_csv("billboard_data_with_lyrics")
 lyrics_data = loaded_data["Lyrics"]
 
+# FIRST VISUALIZATION
 positivity_scores = []
 
 # Add a Positivity series to the Billboard dataframe
@@ -63,7 +64,9 @@ years = [
 
 plt.figure()
 plt.plot(years, scores, "r--")  # plot general trend line
-
+plt.xlabel("Year")
+plt.ylabel("Polarity Score")
+plt.title("Polarity Score of Every Top 100 Song, 2013-2023")
 # Plot every song and its score
 indiv_scores = plt.scatter(
     np.linspace(2013, 2023.99, num=1100), positivity_scores
@@ -99,7 +102,7 @@ def show_hover_panel(get_text_func=None):
             arrowprops=None,
         ),
         highlight=True,
-        highlight_kwargs=dict(linewidth=2),
+        highlight_kwargs={"linewidth": 2},
     )
 
     if get_text_func:
@@ -131,7 +134,7 @@ def on_add(index):
         ]
         return "\n".join(parts)
     except KeyError:  # don't hover when the cursor is over the trendline
-        pass
+        return None
 
 
 show_hover_panel(on_add)  # add hover labels
@@ -180,13 +183,11 @@ with open("billboard_data_with_lyrics.csv", mode="r", encoding="utf-8") as file:
                 continue
 
             if artist in polarity_score:
-
                 polarity_score[artist] += helper_function.polarity(
                     rows[j * 100 + i][4]
                 )["compound"]
                 polarity_count[artist] += 1
             else:
-
                 polarity_score[artist] = helper_function.polarity(
                     rows[j * 100 + i][4]
                 )["compound"]
@@ -204,16 +205,16 @@ all_scores = [
 ]
 global_min = min(all_scores)
 global_max = max(all_scores)
-ncols = 3
-nrows = len(top_artist_polarityscore) // ncols + (
-    len(top_artist_polarityscore) % ncols > 0
+NCOLS = 3
+NROWS = len(top_artist_polarityscore) // NCOLS + (
+    len(top_artist_polarityscore) % NCOLS > 0
 )
 
 # Create a large figure to hold all subplots
-plt.figure(figsize=(ncols * 5, nrows * 5))  # Width and height of entire figure
+plt.figure(figsize=(NCOLS * 5, NROWS * 5))  # Width and height of entire figure
 
 for i, yearly_data in enumerate(extended_data, start=1):
-    ax = plt.subplot(nrows, ncols, i)
+    ax = plt.subplot(NROWS, NCOLS, i)
     artists = list(yearly_data.keys())
     scores = list(yearly_data.values())
     y_pos = np.arange(len(artists))
@@ -227,7 +228,7 @@ for i, yearly_data in enumerate(extended_data, start=1):
     ax.set_ylim(global_min, global_max)
 
     # Set the y-axis label only for the leftmost subplots
-    if i % ncols == 1:
+    if i % NCOLS == 1:
         ax.set_ylabel("Average Polarity Score")
 
 # Adjust the layout so labels and titles do not overlap
@@ -240,7 +241,7 @@ plt.show()
 
 # NEGATIVE WORDS WORDCLOUD
 
-csv_file_path = "billboard_data_with_lyrics.csv"
+CSV_FILE_PATH = "billboard_data_with_lyrics.csv"
 
 # List of words that are not very interesting, don't have interesting changes,
 # and reduce the effectiveness of the word cloud visual
@@ -260,7 +261,7 @@ irrelevant_words = [
     "woo",
 ]
 
-with open(csv_file_path, encoding="utf8", newline="") as csvfile:
+with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
     csvreader = csv.reader(csvfile)
 
     words_dictionary = {}
@@ -283,22 +284,23 @@ with open(csv_file_path, encoding="utf8", newline="") as csvfile:
             if helper_function.polarity(word)["compound"] < -0.3:
                 # Choose the correct dictionary based on the count
                 current_dict = list_of_dictionary[count // 400]
-                # Use get to avoid KeyError, defaults to 0 if the key doesn't exist
+                # Use get to avoid KeyError, defaults to 0 if the key doesn't
+                # exist
                 current_dict[word] = current_dict.get(word, 0) + 1
 
 
 # Generate the word cloud
-year = 2013
+YEAR = 2013
 for i in range(3):
     helper_function.generate_word_cloud_from_frequencies(
         list_of_dictionary[i],
-        f"Negative Word Cloud From Year {year} to {year + 3 - (i == 2)} ",
+        f"Negative Word Cloud From Year {YEAR} to {YEAR + 3 - (i == 2)} ",
     )
-    year += 4
+    YEAR += 4
 
 # POSITIVE WORDS WORDCLOUD
 
-with open(csv_file_path, newline="") as csvfile:
+with open(CSV_FILE_PATH, encoding="utf8", newline="") as csvfile:
     csvreader = csv.reader(csvfile)
 
     words_dictionary = {}
@@ -321,14 +323,15 @@ with open(csv_file_path, newline="") as csvfile:
             if helper_function.polarity(word)["compound"] > 0.3:
                 # Choose the correct dictionary based on the count
                 current_dict = list_of_dictionary[count // 400]
-                # Use get to avoid KeyError, defaults to 0 if the key doesn't exist
+                # Use get to avoid KeyError, defaults to 0 if the key doesn't
+                # exist
                 current_dict[word] = current_dict.get(word, 0) + 1
 
 # Generate the word cloud
-year = 2013
+YEAR = 2013
 for i in range(3):
     helper_function.generate_word_cloud_from_frequencies(
         list_of_dictionary[i],
-        f"Positive Word Cloud From Year {year} to {year + 3 - (i == 2)} ",
+        f"Positive Word Cloud From Year {YEAR} to {YEAR + 3 - (i == 2)} ",
     )
-    year += 4
+    YEAR += 4

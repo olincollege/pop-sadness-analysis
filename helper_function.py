@@ -1,10 +1,15 @@
+"""
+This module includes all helper functions for our API call and data
+visualizations.
+"""
+
+import re
 import nltk
 import matplotlib.pyplot as plt
-import re
 from wordcloud import WordCloud
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 nltk.download("vader_lexicon")  # Run this line the first time you run this code
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 analyzer = SentimentIntensityAnalyzer()
 
@@ -79,8 +84,8 @@ def generate(dataframe):
         dataframe: a dataframe containing a series titled "Artists", from which
         the list of artists will be made.
     Returns:
-        a list of all artists in the dataframe. Artists are included multiple times
-        if they have multiple songs on the chart.
+        a list of all artists in the dataframe. Artists are included multiple
+        times if they have multiple songs on the chart.
     """
     artists = []
     for i in range(len(dataframe)):
