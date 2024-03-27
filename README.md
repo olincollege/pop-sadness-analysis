@@ -10,7 +10,7 @@ In addition, we have visuals in order to justify our point in this data analysis
 - First, create a Genius account.
 - Navigate to the Genius API client page and create a new API client.
 - Insert your GitHub project link into the API client's website field, along with any other required details.
-- Take note of your client access token and store it in a file named `api_key.py` within your project. Initialize a variable named `client_access_token` in this file with your token. Change the variable name to your own api key, this is the only change in code you need.
+- Take note of your client access token and store it in a file named `api_key.py` within the code folder of your project. Initialize a variable named `client_access_token` in this file with your token. Change the variable name to your own api key, this is the only change in code you need.
 
 The genius API will be important in order to scrape the lyrical data. In addition to that, we provide the bill_board data in a csv file, which mentions the top 100 pop-artists over the decade. Therefore, this is how you can access the data. 
 
